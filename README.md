@@ -3,12 +3,12 @@ MTXlab
 
 <img src="https://img.shields.io/badge/Study%20Status-Repo%20Created-lightgray.svg" alt="Study Status: Repo Created">
 
-- Analytics use case(s): **Patient-Level Prediction**
-- Study type: **Methods Research**
+- Analytics use case(s): **Characterization**
+- Study type: **Characterization**
 - Tags: **Prediction models**
 - Study lead: **Alexander Saelmans**
 - Study lead forums tag: **[add](https://forums.ohdsi.org/u/add)**
-- Study start date: **02-25-2025**
+- Study start date: **08-05-2026**
 - Study end date: **-**
 - Protocol: **-**
 - Publications: **-**
