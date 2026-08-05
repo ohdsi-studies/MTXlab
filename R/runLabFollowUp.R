@@ -1,17 +1,22 @@
 runLabFollowUp <- function(
-  con,
-  workDatabaseSchema,
-  cohortTable,
-  cdmDatabaseSchema
+    con,
+    workDatabaseSchema,
+    cohortTable,
+    cdmDatabaseSchema
 ) {
 
-  labDefinitions <- getLabDefinitions()
+  labs <- getLabDefinitions()
 
-  output <- list()
+  results <- list()
 
-  for(i in seq_len(nrow(labDefinitions))) {
+  for (i in seq_len(nrow(labs))) {
 
-    output[[ labDefinitions$labName[i] ]] <-
+    message(
+      "Running ",
+      labs$labName[i]
+    )
+
+    results[[labs$labName[i]]] <-
       calculateLabFollowUp(
         con = con,
         workDatabaseSchema = workDatabaseSchema,
@@ -19,23 +24,23 @@ runLabFollowUp <- function(
         cdmDatabaseSchema = cdmDatabaseSchema,
 
         labName =
-          labDefinitions$labName[i],
+          labs$labName[i],
 
         cohortDefinitionId =
-          labDefinitions$cohortDefinitionId[i],
+          labs$cohortDefinitionId[i],
 
         ancestorConceptId =
-          labDefinitions$ancestorConceptId[i],
+          labs$ancestorConceptId[i],
 
         abnormalLowerLimit =
-          labDefinitions$abnormalLowerLimit[i],
+          labs$abnormalLowerLimit[i],
 
         abnormalUpperLimit =
-          labDefinitions$abnormalUpperLimit[i]
+          labs$abnormalUpperLimit[i]
       )
 
   }
 
-  output
+  return(results)
 
 }
