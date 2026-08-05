@@ -1,3 +1,12 @@
+#' Returns a dataframe with lab definitions
+#'
+#' @details
+#' The user specifies 
+#'
+#' @return
+#' a data frame
+#' 
+#' @export
 getLabDefinitions <- function() {
 
   data.frame(
