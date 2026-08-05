@@ -1,6 +1,6 @@
-Package: QRISKvalidation
+Package: MTXlab
 Type: Package
-Title: Network QRISK Temporal Validation Study
+Title: Network MTXlab study
 Version: 0.0.0.9000
 Date: 2026-08-05
 Authors@R: (
