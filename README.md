@@ -1,12 +1,25 @@
 MTXlab
 =================
 
+<img src="https://img.shields.io/badge/Study%20Status-Repo%20Created-lightgray.svg" alt="Study Status: Repo Created">
+
+- Analytics use case(s): **Patient-Level Prediction**
+- Study type: **Methods Research**
+- Tags: **Prediction models**
+- Study lead: **Alexander Saelmans**
+- Study lead forums tag: **[add](https://forums.ohdsi.org/u/add)**
+- Study start date: **02-25-2025**
+- Study end date: **-**
+- Protocol: **-**
+- Publications: **-**
+- Results explorer: **-**
 
 Code to run
 ================
 
 ```r
-### Laboratory measurement characteristics
+
+#Laboratory measurement characteristics
 
 results <- runLabFollowUp(
   con = con,
@@ -23,10 +36,10 @@ exportLabResults(
   )
 )
 
-### Baseline characteristics
+#Baseline characteristics
 
-### Incidence rates
+#Incidence rates
 
-### Kaplan-Meier plots
+#Kaplan-Meier plots
 
 ```
