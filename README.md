@@ -23,6 +23,7 @@ con <- ""
 workDatabaseSchema <- ""
 cohortTable <- ""
 cdmDatabaseSchema <- ""
+outputFolder <- ""
 
 #Generate cohorts
 
