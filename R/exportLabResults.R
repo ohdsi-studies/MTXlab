@@ -3,11 +3,11 @@
 #' @details
 #' The user specifies 
 #'
-#' @param results from getLabFollowUp
+#' @param results from calculateLabFollowUp
 #' @param outputFile 
 #'
 #' @return
-#' a data frame
+#' a workbook
 #' 
 #' @export
 exportLabResults <- function(
