@@ -5,7 +5,7 @@ MTXlab
 
 - Analytics use case(s): **Characterization**
 - Study type: **Characterization**
-- Tags: **Prediction models**
+- Tags: **Characterization & Prediction models**
 - Study lead: **Alexander Saelmans**
 - Study lead forums tag: **[add](https://forums.ohdsi.org/u/add)**
 - Study start date: **08-05-2026**
