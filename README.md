@@ -18,6 +18,8 @@ Code to run
 ================
 
 ```r
+#Generate cohorts
+
 
 #Laboratory measurement characteristics
 
