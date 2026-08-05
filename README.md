@@ -27,6 +27,13 @@ outputFolder <- ""
 
 #Generate cohorts
 
+generateCohorts <- function(
+    connectionDetails = con,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cohortDatabaseSchema = workDatabaseSchema,
+    cohortTable = cohortTable,
+    tempDatabaseSchema
+)
 
 #Laboratory measurement characteristics
 
