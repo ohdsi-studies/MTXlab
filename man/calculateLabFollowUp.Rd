@@ -25,7 +25,7 @@ calculateLabFollowUp(con,
 A dataframe
 }
 \description{
-Create qrisk 1 model for females using Qrisk cohorts
+Calculate Lab Follow Up
 }
 \details{
 Calculate Lab Follow Up
