@@ -4,4 +4,4 @@ export(calculateLabFollowUp)
 export(exportLabResults)
 export(getLabDefinitions)
 export(runLabFollowUp)
-
+export(generateCohorts)
