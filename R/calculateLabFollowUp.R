@@ -1,3 +1,17 @@
+#' Calculate Lab Follow Up
+#'
+#' @details
+#' The user specifies 
+#'
+#' @param con the connection by means of connectionDetails
+#' @param workDatabaseSchema
+#' @param cohortTabl the cohort table name
+#' @param cdmDatabaseSchema 
+#'
+#' @return
+#' a data frame
+#' 
+#' @export
 calculateLabFollowUp <- function(con,
                                  workDatabaseSchema,
                                  cohortTable,
