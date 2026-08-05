@@ -1,3 +1,15 @@
+#' Export Lab Results
+#'
+#' @details
+#' The user specifies 
+#'
+#' @param results from getLabFollowUp
+#' @param outputFile 
+#'
+#' @return
+#' a data frame
+#' 
+#' @export
 exportLabResults <- function(
     results,
     outputFile
