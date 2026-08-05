@@ -18,13 +18,19 @@ Code to run
 ================
 
 ```r
+#Inputs
+con <- ""
+workDatabaseSchema <- ""
+cohortTable <- ""
+cdmDatabaseSchema <- ""
+
 #Generate cohorts
 
 
 #Laboratory measurement characteristics
 
 results <- runLabFollowUp(
-  con = con,
+  con = "",
   workDatabaseSchema = "",
   cohortTable = "",
   cdmDatabaseSchema = ""
