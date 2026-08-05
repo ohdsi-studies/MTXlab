@@ -1,4 +1,4 @@
-StrategusStudyRepoTemplate
+MTXlab
 =================
 
 See the **[Using This Template.md](template_docs/UsingThisTemplate.md)** for more information on how to use this template.
