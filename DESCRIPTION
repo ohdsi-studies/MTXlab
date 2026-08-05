@@ -1,1 +1,33 @@
-
+Package: QRISKvalidation
+Type: Package
+Title: Network QRISK Temporal Validation Study
+Version: 0.0.0.9000
+Date: 2026-08-05
+Authors@R: (
+  person("Alexander", "Saelmans", email = "Saelmans@ohdsi.org", role = c("aut", "cre"))
+  )
+Maintainer: Alexander Saelmans <Saelmans@ohdsi.org>
+Description: Characterization and prediction of abnormal laboratory values in MTX administration
+License: Apache License 2.0
+VignetteBuilder: knitr
+Depends:
+  R (>= 3.3.0)
+Imports:
+  DatabaseConnector,
+  CohortGenerator,
+  FeatureExtraction,
+  dplyr,
+  ggplot2,
+  ParallelLogger,
+  ResultModelManager,
+  Strategus
+Suggests:
+  knitr,
+  markdown,
+  remotes,
+  rmarkdown,
+  testthat
+Remotes:
+  ohdsi/Strategus
+RoxygenNote: 7.3.2
+Encoding: UTF-8
