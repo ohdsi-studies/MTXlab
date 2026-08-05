@@ -1,6 +1,11 @@
 MTXlab
 =================
 
+
+Code to run
+================
+
+```r
 ### Laboratory measurement characteristics
 
 results <- runLabFollowUp(
@@ -24,3 +29,4 @@ exportLabResults(
 
 ### Kaplan-Meier plots
 
+```
