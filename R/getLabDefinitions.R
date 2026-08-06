@@ -68,7 +68,30 @@ getLabDefinitions <- function() {
       2,
       2000,
       100
-    )
-  )
+    ),
+
+    plausibleLowerLimit = c(
+      1, #ALT
+      1, #eGFR
+      8.84, #Creatinine EU
+      0.1, #Creatinine USA
+      1.86, #Hemoglobin EU
+      3, #Hemoglobin USA
+      0, #Leucocytes EU
+      0, #Leucocytes USA
+      0 #Platelets
+  ),
+
+    plausibleUpperLimit = c(
+      10000, #ALT
+      200, #eGFR
+      2653, #Creatinine EU
+      30, #Creatinine USA
+      12.4, #Hemoglobin EU
+      20, #Hemoglobin USA
+      500, #Leucocytes EU
+      500000, #Leucocytes USA
+      2000  #Platelets
+      )
 
 }
