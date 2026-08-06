@@ -20,7 +20,9 @@ calculateLabFollowUp <- function(con,
                                  cohortDefinitionId,
                                  ancestorConceptId,
                                  abnormalLowerLimit,
-                                 abnormalUpperLimit) {
+                                 abnormalUpperLimit,
+                                 plausibleLowerLimit,
+                                 plausibleUpperLimit) {
   
   results <- list()
   
@@ -70,6 +72,8 @@ FROM ", cdmDatabaseSchema, ".concept_ancestor
 WHERE ancestor_concept_id = ", ancestorConceptId, "
 )
 AND m.value_as_number IS NOT NULL
+AND m.value_as_number >= ",plausibleLowerLimit,"
+AND m.value_as_number <= ",plausibleUpperLimit,"
 AND m.measurement_date >= c.cohort_start_date + INTERVAL '",
       startMonth,
       " MONTHS'
