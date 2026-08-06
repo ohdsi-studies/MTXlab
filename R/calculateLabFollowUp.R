@@ -105,6 +105,26 @@ medianLabPerPatient <- if (nrow(labCounts) > 0) {
   NA
 }
 
+q1LabPerPatient <- if (nrow(labCounts) > 0) {
+  quantile(
+    labCounts$nLab,
+    probs = 0.25,
+    na.rm = TRUE
+  )
+} else {
+  NA
+}
+
+q3LabPerPatient <- if (labCounts) > 0) {
+  quantile(
+    labCounts$nLab,
+    probs = 0.75,
+    na.rm = TRUE
+  )
+} else {
+  NA
+}
+
 meanLabPerPatient <- if (nrow(labCounts) > 0) {
   mean(labCounts$nLab, na.rm = TRUE)
 } else {
@@ -177,6 +197,8 @@ results[[paste0(startMonth, "_", endMonth)]] <- data.frame(
   MissingPct = round(missingPercentage, 2),
   
   MedianMeasurementsPerPatient = medianLabPerPatient,
+  Q1MeasurementsPerPatient = q1LabPerPatient,
+  Q3MeasurementsPerPatient = q3LabPerPatient,
   MeanMeasurementsPerPatient = meanLabPerPatient,
   SDMeasurementsPerPatient = sdLabPerPatient,
   
