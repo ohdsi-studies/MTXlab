@@ -64,6 +64,7 @@ exportLabResults(
 Code to run
 ================
 
+The results can be submitted as follows
 
 
 ```r
