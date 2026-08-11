@@ -79,6 +79,8 @@ sourceName <- "" #name of the database/source
 # Path to the folder that should contain the output
 outputFolder <- "./output/folder/" 
 
+# =========== END OF INPUTS ========== #
+
 #Generate cohorts
 
 generateCohorts <- function(
@@ -134,6 +136,10 @@ outputFolder = outputFolder
 
 #Model validation
 
+
+#======================================#
+# Don't forget to deactivate your Renv
+renv::deactivate()
 
 ```
 
