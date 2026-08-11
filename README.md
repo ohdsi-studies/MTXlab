@@ -19,16 +19,16 @@ Code to run
 
 ```r
 #Inputs
-con <- ""
+connectionDetails <- ""
 workDatabaseSchema <- ""
 cohortTable <- ""
 cdmDatabaseSchema <- ""
-outputFolder <- ""
+outputFolder <- "" #path to the folder that should contain the output
 
 #Generate cohorts
 
 generateCohorts <- function(
-    connectionDetails = con,
+    connectionDetails = connectionDetails,
     cdmDatabaseSchema = cdmDatabaseSchema,
     cohortDatabaseSchema = workDatabaseSchema,
     cohortTable = cohortTable,
@@ -38,10 +38,10 @@ generateCohorts <- function(
 #Laboratory measurement characteristics
 
 results <- runLabFollowUp(
-  con = "",
-  workDatabaseSchema = "",
-  cohortTable = "",
-  cdmDatabaseSchema = ""
+  con = connectionDetails,
+  workDatabaseSchema = workDatabaseSchema,
+  cohortTable = cohortTable,
+  cdmDatabaseSchema = cdmDatabaseSchema
 )
 
 exportLabResults(
@@ -57,13 +57,13 @@ exportLabResults(
 #Incidence rates
 
 results <- runIncidenceAnalysis(
-connectionDetails = "",
-cdmDatabaseSchema = "",
-cohortDatabaseSchema = "",
-cohortTable = "",
-workDatabaseSchema = "",
-sourceName = "",
-outputFolder = ""
+connectionDetails = connectionDetails,
+cdmDatabaseSchema = cdmDatabaseSchema,
+cohortDatabaseSchema = workDatabaseSchema,
+cohortTable = cohortTable,
+workDatabaseSchema = workDatabaseSchema,
+sourceName = "", #Name of the database/source
+outputFolder = outputFolder
 )
 
 #Kaplan-Meier plots
