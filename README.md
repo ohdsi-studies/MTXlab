@@ -146,10 +146,24 @@ renv::deactivate()
 Submitting results
 ================
 
-The results can be submitted as follows
-
+To send the compressed folder results please message Alexander Saelmans (a.saelmans@erasmusmc.nl) and he will give you the privateKeyFileName and userName. You can then run the following R code to share the results:
 
 ```r
+# Please upload both the strategusWork and strategusOutput folders
+ 
+# One time R package install
+install_github("ohdsi/OhdsiSharing")
+ 
+# Upload local files 'strategusWork.zip' and 'strategusOutput.zip to the sftp server study folder
+library("OhdsiSharing")
+ 
+privateKeyFileName <- "message us for this"
+userName <- "message us for this"
+remoteFolder <- "/"
+fileName <- "example/strategusWork.zip"
+sftpUploadFile(privateKeyFileName, userName, remoteFolder, fileName)
+
+# Please send us the names given to the zip files in the sftp rcriv study folder, so we can access them
 
 
 ```
