@@ -56,6 +56,14 @@ exportLabResults(
 
 #Incidence rates
 
+
 #Kaplan-Meier plots
+
+
+Submitting Results
+================
+
+```r
+
 
 ```
