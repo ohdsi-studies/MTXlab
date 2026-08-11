@@ -19,6 +19,7 @@ Code to run
 
 ```r
 #Inputs
+
 connectionDetails <- ""
 workDatabaseSchema <- ""
 cohortTable <- ""
