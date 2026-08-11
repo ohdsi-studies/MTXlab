@@ -55,6 +55,7 @@ exportLabResults(
 #Baseline characteristics
 
 #Incidence rates
+
 results <- runIncidenceAnalysis(
 connectionDetails = "",
 cdmDatabaseSchema = "",
