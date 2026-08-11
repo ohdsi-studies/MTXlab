@@ -14,7 +14,7 @@ MTXlab
 - Publications: **-**
 - Results explorer: **-**
 
-Code to run
+Code to run 
 ================
 
 ```r
@@ -35,6 +35,8 @@ generateCohorts <- function(
     cohortTable = cohortTable,
     tempDatabaseSchema
 )
+
+# PART I
 
 #Laboratory measurement characteristics
 
@@ -68,6 +70,17 @@ outputFolder = outputFolder
 )
 
 #Kaplan-Meier plots
+
+
+
+
+# PART II
+
+#Model development
+
+
+#Model validation
+
 
 ```
 
