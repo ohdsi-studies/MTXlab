@@ -18,14 +18,35 @@ Code to run
 ================
 
 ```r
-#Inputs
 
-connectionDetails <- ""
-workDatabaseSchema <- ""
-cohortTable <- ""
-cdmDatabaseSchema <- ""
-outputFolder <- "" #path to the folder that should contain the output
+
+# Fill in your connection details and path to driver
+# See ?DatabaseConnector::createConnectionDetails for help for your 
+# database platform
+connectionDetails <- DatabaseConnector::createConnectionDetails(
+  dbms = Sys.getenv("DBMS"), 
+  server = Sys.getenv("DATABASE_SERVER"), 
+  user = Sys.getenv("DATABASE_USER"),
+  password = Sys.getenv("DATABASE_PASSWORD"),
+  port = Sys.getenv("DATABASE_PORT"),
+  connectionString = Sys.getenv("DATABASE_CONNECTION_STRING"),
+  pathToDriver = Sys.getenv("DATABASE_DRIVER")
+) 
+
+# A schema with write access to store cohort tables
+workDatabaseSchema <- Sys.getenv("WORK_SCHEMA")
+  
+# Name of cohort table that will be created for study
+cohortTable <- Sys.getenv("COHORT_TABLE")
+
+# Schema where the cdm data is
+cdmDatabaseSchema <- Sys.getenv("CDM_SCHEMA")
+
+# Name of the database/source
 sourceName <- "" #name of the database/source
+
+# Path to the folder that should contain the output
+outputFolder <- "./output/folder/" 
 
 #Generate cohorts
 
