@@ -55,7 +55,15 @@ exportLabResults(
 #Baseline characteristics
 
 #Incidence rates
-
+results <- runIncidenceAnalysis(
+connectionDetails = "",
+cdmDatabaseSchema = "",
+cohortDatabaseSchema = "",
+cohortTable = "",
+workDatabaseSchema = "",
+sourceName = "",
+outputFolder = ""
+)
 
 #Kaplan-Meier plots
 
