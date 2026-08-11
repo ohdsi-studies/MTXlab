@@ -25,6 +25,7 @@ workDatabaseSchema <- ""
 cohortTable <- ""
 cdmDatabaseSchema <- ""
 outputFolder <- "" #path to the folder that should contain the output
+sourceName <- "" #name of the database/source
 
 #Generate cohorts
 
@@ -65,7 +66,7 @@ cdmDatabaseSchema = cdmDatabaseSchema,
 cohortDatabaseSchema = workDatabaseSchema,
 cohortTable = cohortTable,
 workDatabaseSchema = workDatabaseSchema,
-sourceName = "", #Name of the database/source
+sourceName = sourceName,
 outputFolder = outputFolder
 )
 
