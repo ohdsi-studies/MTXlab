@@ -160,7 +160,7 @@ library("OhdsiSharing")
 privateKeyFileName <- "message us for this"
 userName <- "message us for this"
 remoteFolder <- "/"
-fileName <- "example/strategusWork.zip"
+fileName <- "example/MTXlab.zip"
 sftpUploadFile(privateKeyFileName, userName, remoteFolder, fileName)
 
 # Please send us the names given to the zip files in the sftp rcriv study folder, so we can access them
