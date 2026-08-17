@@ -1,4 +1,4 @@
-KMDefinitions <- data.frame(
+.KMDefinitions <- data.frame(
   condition = c(
     rep("Atopic dermatitis", 9),
     rep("Psoriasis", 9),
