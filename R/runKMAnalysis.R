@@ -67,9 +67,9 @@ runKMAnalysis <- function(
       population = NULL
     )
 
-    if (nrow(population) == 0) {
-      return(NULL)
-    }
+        if (is.null(population) || nrow(population) == 0) {
+         return(NULL)
+        }
 
     population$Condition <- condition
     population$Laboratoryvalue <- laboratoryValue
