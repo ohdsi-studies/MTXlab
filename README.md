@@ -77,7 +77,7 @@ cdmDatabaseSchema <- Sys.getenv("CDM_SCHEMA")
 sourceName <- "" #name of the database/source
 
 # Path to the folder that should contain the output
-outputFolder <- "./output/folder/" 
+outputFolder <- "./output/folder/"
 
 # =========== END OF INPUTS ========== #
 
@@ -114,7 +114,7 @@ exportLabResults(
 
 #Incidence rates
 
-results <- runIncidenceAnalysis(
+IRAnalyses <- runIncidenceAnalysis(
 connectionDetails = connectionDetails,
 cdmDatabaseSchema = cdmDatabaseSchema,
 cohortDatabaseSchema = workDatabaseSchema,
@@ -126,18 +126,15 @@ outputFolder = outputFolder
 
 #Kaplan-Meier plots
 
-#Atopic Dermatitis
 KMAnalyses <- runKMAnalysis(
     connectionDetails = connectionDetails,
     cdmDatabaseSchema = cdmDatabaseSchema,
-    cdmDatabaseName ,                    # AANPASSEN
+    cdmDatabaseName = sourceName,                   
     cohortDatabaseSchema = workDatabaseSchema,
     cohortTable = cohortTable,
-    outcomeDatabaseSchema = ,            # AANPASSEN
-    outcomeTable = ,                     # AANPASSEN
+    outcomeDatabaseSchema = cohortDatabaseSchema,            
+    outcomeTable = cohortTable,                     
     outputFolder = outputFolder)
-
-
 
 # PART II
 
