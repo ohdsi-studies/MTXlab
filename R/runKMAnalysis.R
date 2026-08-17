@@ -13,8 +13,8 @@ runKMAnalysis <- function(
     outputFolder = "."
 ) {
 
-  selectedLabs <- .labDefinitions[
-    .labDefinitions$condition == condition,
+  selectedLabs <- .KMDefinitions[
+    .KMDefinitions$condition == condition,
   ]
 
   if (nrow(selectedLabs) == 0) {
