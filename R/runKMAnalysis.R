@@ -67,6 +67,10 @@ runKMAnalysis <- function(
       population = NULL
     )
 
+    if (nrow(population) == 0) {
+      return(NULL)
+    }
+
     population$Condition <- condition
     population$Laboratoryvalue <- laboratoryValue
 
@@ -88,29 +92,87 @@ runKMAnalysis <- function(
     populations <- lapply(
       seq_len(nrow(selectedLabs)),
       function(i) {
-        runPopulation(
-          targetId = selectedLabs$targetId[i],
-          outcomeId = selectedLabs$outcomeId[i],
-          laboratoryValue = selectedLabs$laboratoryValue[i],
-          condition = condition
+
+        tryCatch(
+          {
+            runPopulation(
+              targetId = selectedLabs$targetId[i],
+              outcomeId = selectedLabs$outcomeId[i],
+              laboratoryValue = selectedLabs$laboratoryValue[i],
+              condition = condition
+            )
+          },
+          error = function(e) {
+
+            warning(
+              paste0(
+                "Failed for condition='", condition,
+                "', targetId=", selectedLabs$targetId[i],
+                ", outcomeId=", selectedLabs$outcomeId[i],
+                ". Error: ", e$message
+              )
+            )
+
+            NULL
+          }
         )
       }
     )
 
+    populations <- Filter(Negate(is.null), populations)
+
+    if (length(populations) == 0) {
+      warning(
+        "No eligible populations found for condition: ",
+        condition
+      )
+      next
+    }
+
     populationData <- dplyr::bind_rows(populations)
+
+    if (nrow(populationData) == 0) {
+      warning(
+        "No population data available for condition: ",
+        condition
+      )
+      next
+    }
 
     populationData$Database <- cdmDatabaseName
 
-    sfit <- survival::survfit(
-      survival::Surv(
-        survivalTime,
-        outcomeCount
-      ) ~ interaction(
-        Laboratoryvalue,
-        Database
-      ),
-      data = populationData
+    sfit <- tryCatch(
+      {
+        survival::survfit(
+          survival::Surv(
+            survivalTime,
+            outcomeCount
+          ) ~ interaction(
+            Laboratoryvalue,
+            Database,
+            sep = "___"
+          ),
+          data = populationData
+        )
+      },
+      error = function(e) {
+
+        warning(
+          paste0(
+            "KM fit failed for condition='",
+            condition,
+            "'. Error: ",
+            e$message
+          )
+        )
+
+        NULL
+      }
     )
+
+    if (is.null(sfit)) {
+      next
+    }
 
     surv_tab <- survminer::surv_summary(
       sfit,
@@ -126,7 +188,7 @@ runKMAnalysis <- function(
       tidyr::separate(
         grp,
         into = c("Laboratoryvalue", "Database"),
-        sep = "\\.",
+        sep = "___",
         fill = "right",
         extra = "merge"
       ) %>%
@@ -158,6 +220,13 @@ runKMAnalysis <- function(
     )
 
     results[[condition]] <- surv_tab
+
+    message(
+      "Saved results for ",
+      condition,
+      " to ",
+      fileName
+    )
   }
 
   return(results)
