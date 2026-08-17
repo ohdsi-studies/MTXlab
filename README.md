@@ -126,6 +126,16 @@ outputFolder = outputFolder
 
 #Kaplan-Meier plots
 
+#Atopic Dermatitis
+KMAD <- runAtopicDermatitisAnalysis(
+    connectionDetails = connectionDetails,
+    cdmDatabaseSchema = cdmDatabaseSchema,
+    cdmDatabaseName ,                    # AANPASSEN
+    cohortDatabaseSchema = workDatabaseSchema,
+    cohortTable = cohortTable,
+    outcomeDatabaseSchema = ,            # AANPASSEN
+    outcomeTable = ,                     # AANPASSEN
+    outputFolder = outputFolder)
 
 
 
