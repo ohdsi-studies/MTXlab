@@ -8,7 +8,8 @@ runAtopicDermatitisAnalysis <- function(
     cohortDatabaseSchema,
     cohortTable,
     outcomeDatabaseSchema,
-    outcomeTable
+    outcomeTable,
+    outputFolder = "."
 ) {
 
   runPopulation <- function(
