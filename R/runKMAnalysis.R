@@ -9,27 +9,14 @@ runKMAnalysis <- function(
     cohortTable,
     outcomeDatabaseSchema,
     outcomeTable,
-    condition,
     outputFolder = "."
 ) {
-
-  selectedLabs <- .KMDefinitions[
-    .KMDefinitions$condition == condition,
-  ]
-
-  if (nrow(selectedLabs) == 0) {
-    stop(
-      paste(
-        "No laboratory definitions found for condition:",
-        condition
-      )
-    )
-  }
 
   runPopulation <- function(
       targetId,
       outcomeId,
-      laboratoryValue
+      laboratoryValue,
+      condition
   ) {
 
     databaseDetails <- PatientLevelPrediction::createDatabaseDetails(
@@ -86,76 +73,92 @@ runKMAnalysis <- function(
     return(population)
   }
 
-  populations <- lapply(
-    seq_len(nrow(selectedLabs)),
-    function(i) {
-      runPopulation(
-        targetId = selectedLabs$targetId[i],
-        outcomeId = selectedLabs$outcomeId[i],
-        laboratoryValue = selectedLabs$laboratoryValue[i]
-      )
-    }
-  )
+  conditions <- unique(.KMDefinitions$condition)
 
-  populationData <- dplyr::bind_rows(populations)
+  results <- list()
 
-  populationData$Database <- cdmDatabaseName
+  for (condition in conditions) {
 
-  sfit <- survival::survfit(
-    survival::Surv(
-      survivalTime,
-      outcomeCount
-    ) ~ interaction(
-      Laboratoryvalue,
-      Database
-    ),
-    data = populationData
-  )
+    message("Running: ", condition)
 
-  surv_tab <- survminer::surv_summary(
-    sfit,
-    data = populationData
-  ) %>%
-    tidyr::separate(
-      strata,
-      into = c("ignore", "grp"),
-      sep = "=",
-      fill = "right",
-      extra = "merge"
-    ) %>%
-    tidyr::separate(
-      grp,
-      into = c("Laboratoryvalue", "Database"),
-      sep = "\\.",
-      fill = "right",
-      extra = "merge"
-    ) %>%
-    dplyr::select(
-      time,
-      surv,
-      lower,
-      upper,
-      n.risk,
-      n.event,
-      n.censor,
-      Laboratoryvalue,
-      Database
-    ) %>%
-    dplyr::mutate(
-      Laboratoryvalue = as.factor(Laboratoryvalue),
-      Database = as.factor(Database)
+    selectedLabs <- .KMDefinitions[
+      .KMDefinitions$condition == condition,
+    ]
+
+    populations <- lapply(
+      seq_len(nrow(selectedLabs)),
+      function(i) {
+        runPopulation(
+          targetId = selectedLabs$targetId[i],
+          outcomeId = selectedLabs$outcomeId[i],
+          laboratoryValue = selectedLabs$laboratoryValue[i],
+          condition = condition
+        )
+      }
     )
 
-  fileName <- paste0(
-    "survtab_",
-    gsub("[^A-Za-z0-9]", "", condition),
-    ".csv"
-  )
+    populationData <- dplyr::bind_rows(populations)
 
-  readr::write_csv(
-    surv_tab,
-    file.path(outputFolder, fileName)
-  )
+    populationData$Database <- cdmDatabaseName
 
-  return(surv_tab)
+    sfit <- survival::survfit(
+      survival::Surv(
+        survivalTime,
+        outcomeCount
+      ) ~ interaction(
+        Laboratoryvalue,
+        Database
+      ),
+      data = populationData
+    )
+
+    surv_tab <- survminer::surv_summary(
+      sfit,
+      data = populationData
+    ) %>%
+      tidyr::separate(
+        strata,
+        into = c("ignore", "grp"),
+        sep = "=",
+        fill = "right",
+        extra = "merge"
+      ) %>%
+      tidyr::separate(
+        grp,
+        into = c("Laboratoryvalue", "Database"),
+        sep = "\\.",
+        fill = "right",
+        extra = "merge"
+      ) %>%
+      dplyr::select(
+        time,
+        surv,
+        lower,
+        upper,
+        n.risk,
+        n.event,
+        n.censor,
+        Laboratoryvalue,
+        Database
+      ) %>%
+      dplyr::mutate(
+        Laboratoryvalue = as.factor(Laboratoryvalue),
+        Database = as.factor(Database)
+      )
+
+    fileName <- paste0(
+      "survtab_",
+      gsub("[^A-Za-z0-9]", "", condition),
+      ".csv"
+    )
+
+    readr::write_csv(
+      surv_tab,
+      file.path(outputFolder, fileName)
+    )
+
+    results[[condition]] <- surv_tab
+  }
+
+  return(results)
 }
