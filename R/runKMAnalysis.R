@@ -1,5 +1,20 @@
 #' Run KM analysis
 #'
+#' @details
+#' The user specifies 
+#'
+#' @param connectionDetails
+#' @param cdmDatabaseSchema
+#' @param cdmDatabaseName
+#' @param cohortDatabaseSchema
+#' @param cohortTable
+#' @param outcomeDatabaseSchema
+#' @param outcomeTable
+#' @param outputFolder
+#'
+#' @return
+#' a data frame
+#' 
 #' @export
 runKMAnalysis <- function(
     connectionDetails,
