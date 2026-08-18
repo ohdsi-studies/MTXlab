@@ -42,9 +42,7 @@ runCharacterizationExport <- function(
     24658, 24659
   )
 
-  covariateIds <- c(  #FILL IN COVARIATE IDs
-    )
-
+ covariateIds <- c(18778, 24936, 19285, 21288, 21287, 24934, 24935, 24933, 24655, 24656)
   
   covariateSettings <- FeatureExtraction::createCovariateSettings(
     useDemographicsGender = TRUE,
