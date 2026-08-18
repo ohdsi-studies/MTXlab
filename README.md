@@ -112,6 +112,19 @@ exportLabResults(
 
 #Baseline characteristics
 
+runCharacterizationExport(
+  connectionDetails = connectionDetails,
+  cdmDatabaseSchema = cdmDatabaseSchema,
+  targetDatabaseSchema = cohortDatabaseSchema,
+  targetTable = cohortTable,
+  outcomeDatabaseSchema =  cohortDatabaseSchema,
+  outcomeTable = cohortTable,
+  outputDirectory = outputFolder,
+  executionPath = outputFolder,
+  csvFilePrefix = sourceName,
+  databaseId = "MyDatabase"
+)
+
 #Incidence rates
 
 IRAnalyses <- runIncidenceAnalysis(
