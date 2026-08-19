@@ -118,4 +118,3 @@ runCharacterizationExport <- function(
 
   return(results)
 }
-``
