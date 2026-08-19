@@ -47,7 +47,7 @@ getLabDefinitions <- function() {
       "Leucocytes USA RA",
       "Platelets RA",
       "ALT PsA",
-      "eGFR oPsA",
+      "eGFR PsA",
       "Creatinine EU PsA",
       "Creatinine USA PsA",
       "Hemoglobin EU PsA",
