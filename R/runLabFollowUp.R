@@ -50,7 +50,15 @@ runLabFollowUp <- function(
           labs$abnormalLowerLimit[i],
 
         abnormalUpperLimit =
-          labs$abnormalUpperLimit[i]
+          labs$abnormalUpperLimit[i],
+
+        plausibleLowerLimit =
+          labs$plausibleLowerLimit[i],
+
+        plausibleUpperLimit =
+          labs$plausibleUpperLimit[i]
+
+        
       )
 
   }
