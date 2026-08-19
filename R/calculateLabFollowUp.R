@@ -31,7 +31,7 @@ calculateLabFollowUp <- function(con,
     endMonth <- startMonth + 6
     
     # Patients still exposed and in data
-    labCohort <- querySql(
+    labCohort <- DatabaseConnector::querySql(
       con,
       paste0(
         "
