@@ -120,7 +120,7 @@ outputFolder <- "./output/folder/"
 
 #Generate cohorts
 
-generateCohorts <- function(
+generateCohorts(
     connectionDetails = connectionDetails,
     cdmDatabaseSchema = cdmDatabaseSchema,
     cohortDatabaseSchema = workDatabaseSchema,
