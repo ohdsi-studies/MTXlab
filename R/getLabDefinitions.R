@@ -8,7 +8,6 @@
 #' 
 #' @export
 getLabDefinitions <- function() {
-
   data.frame(
     labName = c(
       "ALT overall",
@@ -73,9 +72,8 @@ getLabDefinitions <- function() {
       "Hemoglobin USA UC",
       "Leucocytes EU UC",
       "Leucocytes USA UC",
-      "Platelets UC",
+      "Platelets UC"
     ),
-
     cohortDefinitionId = c(
       24769,
       24770,
@@ -141,7 +139,6 @@ getLabDefinitions <- function() {
       24926,
       24927
     ),
-
     ancestorConceptId = c(
       4146380,
       36662614,
@@ -207,7 +204,6 @@ getLabDefinitions <- function() {
       37043992,
       4267147
     ),
-
     abnormalLowerLimit = c(
       150,
       10,
@@ -273,7 +269,6 @@ getLabDefinitions <- function() {
       500,
       10
     ),
-
     abnormalUpperLimit = c(
       1000,
       45,
@@ -339,7 +334,6 @@ getLabDefinitions <- function() {
       2000,
       100
     ),
-
     plausibleLowerLimit = c(
       1, #ALT
       1, #eGFR
@@ -405,7 +399,6 @@ getLabDefinitions <- function() {
       0, #Leucocytes USA
       0 #Platelets
   ),
-
     plausibleUpperLimit = c(
       10000, #ALT
       200, #eGFR
@@ -471,5 +464,5 @@ getLabDefinitions <- function() {
       500000, #Leucocytes USA
       2000  #Platelets
       )
-
+)
 }
