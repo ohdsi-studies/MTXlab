@@ -119,7 +119,7 @@ q1LabPerPatient <- if (nrow(labCounts) > 0) {
   NA
 }
 
-q3LabPerPatient <- if (labCounts) > 0) {
+q3LabPerPatient <- if (nrow(labCounts) > 0) {
   quantile(
     labCounts$nLab,
     probs = 0.75,
