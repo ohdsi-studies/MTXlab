@@ -99,6 +99,17 @@ runCharacterizationExport <- function(
       riskFactorSettings = list(riskFactorSettings)
     )
 
+#Create Characterization subfolder
+    characterizationOutputDirectory <- file.path(
+        outputDirectory, 
+        "Characterization"
+        )
+
+    if (!dir.exists(characterizationOutputDirectory)) {
+        dir.create(characterizationOutputDirectory,
+                   recursive = TRUE)
+        }
+    
   results <- Characterization::runCharacterizationAnalyses(
     connectionDetails = connectionDetails,
     cdmDatabaseSchema = cdmDatabaseSchema,
@@ -107,7 +118,7 @@ runCharacterizationExport <- function(
     outcomeDatabaseSchema = outcomeDatabaseSchema,
     outcomeTable = outcomeTable,
     characterizationSettings = characterizationSettings,
-    outputDirectory = outputDirectory,
+    outputDirectory = characterizationOutputDirectory,
     executionPath = executionPath,
     csvFilePrefix = csvFilePrefix,
     databaseId = databaseId,
