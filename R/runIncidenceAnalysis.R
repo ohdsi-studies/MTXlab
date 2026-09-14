@@ -174,10 +174,18 @@ runIncidenceAnalysis <- function(
     tars = tarDefs,
     analysisList = list(incidenceAnalysis)
   )
-
+  
+cohortTableFull <- if (grepl("\\.", cohortTable)) {
+  cohortTable
+} else {
+  paste(getOption("sqlRenderTempEmulationSchema"),
+        cohortTable,
+        sep = ".")
+}
+    
   buildOptions <- CohortIncidence::buildOptions(
-    cohortTable = cohortTable,
-    outcomeCohortTable = cohortTable,
+    cohortTable = cohortTableFull,
+    outcomeCohortTable = cohortTableFull,
     cdmDatabaseSchema = cdmDatabaseSchema,
     sourceName = sourceName,
     refId = refId
