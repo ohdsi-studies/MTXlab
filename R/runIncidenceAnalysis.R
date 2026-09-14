@@ -201,7 +201,7 @@ cohortTableFull <- if (grepl("\\.", cohortTable)) {
   incidenceSummary$Database <- sourceName
 
   if (!is.null(outputFolder)) {
-
+      
     if (!dir.exists(outputFolder)) {
       dir.create(outputFolder, recursive = TRUE)
     }
