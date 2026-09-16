@@ -98,14 +98,25 @@ generateCohorts(
 
 counts <- DatabaseConnector::querySql(
   con,
-  paste0(
-  "SELECT cohort_definition_id,
-  COUNT(*) AS records,
-  COUNT(DISTINCT subject_id) AS persons
-  FROM
-  GROUP BY cohort_definition_id
-  ORDER BY cohort_definition_id"
+  sql = SqlRender::render(
+    "
+    SELECT cohort_definition_id,
+           COUNT(*) AS records,
+           COUNT(DISTINCT subject_id) AS persons
+    FROM @workDatabaseSchema.@cohortTable
+    GROUP BY cohort_definition_id
+    ORDER BY cohort_definition_id
+    ",
+    workDatabaseSchema = workDatabaseSchema,
+    cohortTable = cohortTable
+  )
 )
+
+# Export counts
+openxlsx::write.xlsx(
+  counts,
+  file = file.path(outputFolder, "cohortCounts.xlsx"),
+  overwrite = TRUE
 )
 
 # PART II - following counts
