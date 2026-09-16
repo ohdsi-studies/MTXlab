@@ -96,6 +96,20 @@ generateCohorts(
 
 # PART I
 
+counts <- DatabaseConnector::querySql(
+  con,
+  paste0(
+  "SELECT cohort_definition_id,
+  COUNT(*) AS records,
+  COUNT(DISTINCT subject_id) AS persons
+  FROM
+  GROUP BY cohort_definition_id
+  ORDER BY cohort_definition_id"
+)
+)
+
+# PART II - following counts
+
 #Laboratory measurement characteristics
 
 results <- runLabFollowUp(
@@ -152,7 +166,7 @@ KMAnalyses <- runKMAnalysis(
     outcomeTable = cohortTable,                     
     outputFolder = outputFolder)
 
-# PART II - following characterization
+# PART III - following characterization
 
 #Model development
 
