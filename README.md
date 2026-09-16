@@ -19,42 +19,6 @@ Code to run
 
 ```r
 
-library(DatabaseConnector)
-library(CohortDiagnostics)
-library(MeasurementDiagnostics)
-library(CohortIncidence)
-library(CohortSurvival)
-library(CDMConnector)
-library(dplyr)
-library(ggplot2)
-library(CohortMethod)
-library(survival)
-library(xlsx)
-library(xlsx)
-library(ggplot2)
-library(tidyverse)
-library(hrbrthemes)
-library(kableExtra)
-library(babynames)
-library(DT)
-library(plotly)
-library(ggforce)
-library(ggh4x)
-library(scales)
-library(paletteer)
-library(PatientLevelPrediction)
-library(FeatureExtraction)
-library(survival)
-library(ggsurvfit)
-library(tidyr)
-library(survminer)
-library(Characterization)
-library(shiny)
-library(OhdsiReportGenerator)
-library(OhdsiShinyModules)
-library(openxlsx)
-library(duckdb)
-
 # Set working directory to Renv file
 #==========================================#
 # Download the Renv lock file from the GitHub page
@@ -99,7 +63,9 @@ connectionDetails <- DatabaseConnector::createConnectionDetails(
   port = Sys.getenv("DATABASE_PORT"),
   connectionString = Sys.getenv("DATABASE_CONNECTION_STRING"),
   pathToDriver = Sys.getenv("DATABASE_DRIVER")
-) 
+)
+
+con <- DatabaseConnector::connect(connectionDetails)
 
 # A schema with write access to store cohort tables
 workDatabaseSchema <- Sys.getenv("WORK_SCHEMA")
@@ -133,7 +99,7 @@ generateCohorts(
 #Laboratory measurement characteristics
 
 results <- runLabFollowUp(
-  con = connectionDetails,
+  con = con,
   workDatabaseSchema = workDatabaseSchema,
   cohortTable = cohortTable,
   cdmDatabaseSchema = cdmDatabaseSchema
@@ -158,8 +124,8 @@ runCharacterizationExport(
   outcomeTable = cohortTable,
   outputDirectory = outputFolder,
   executionPath = outputFolder,
-  csvFilePrefix = sourceName,
-  databaseId = "MyDatabase"
+  csvFilePrefix = "M_",
+  databaseId = "M_"
 )
 
 #Incidence rates
@@ -186,13 +152,11 @@ KMAnalyses <- runKMAnalysis(
     outcomeTable = cohortTable,                     
     outputFolder = outputFolder)
 
-# PART II
+# PART II - following characterization
 
 #Model development
 
-
 #Model validation
-
 
 #======================================#
 # Don't forget to deactivate your Renv
