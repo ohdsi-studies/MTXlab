@@ -120,7 +120,7 @@ openxlsx::write.xlsx(
 )
 
 
-# PART II - following counts
+# PART II - NOT NECESSARY TO RUN NOW
 
 #Laboratory measurement characteristics
 
