@@ -94,8 +94,9 @@ generateCohorts(
     tempDatabaseSchema
 )
 
-# PART I
+# PART I - Only Cohort counts
 
+# Cohort counts
 counts <- DatabaseConnector::querySql(
   con,
   sql = SqlRender::render(
@@ -112,12 +113,12 @@ counts <- DatabaseConnector::querySql(
   )
 )
 
-# Export counts
 openxlsx::write.xlsx(
   counts,
-  file = file.path(outputFolder, "cohortCounts.xlsx"),
+  file = file.path(outputFolder, "MTXlabCohortCounts.xlsx"),
   overwrite = TRUE
 )
+
 
 # PART II - following counts
 
