@@ -12,210 +12,253 @@
 #' a data frame
 #' 
 #' @export
-calculateLabFollowUp <- function(con,
-                                 workDatabaseSchema,
-                                 cohortTable,
-                                 cdmDatabaseSchema,
-                                 labName,
-                                 cohortDefinitionId,
-                                 ancestorConceptId,
-                                 abnormalLowerLimit,
-                                 abnormalUpperLimit,
-                                 plausibleLowerLimit,
-                                 plausibleUpperLimit) {
-  
+calculateLabFollowUp <- function(
+    con,
+    workDatabaseSchema,
+    cohortTable,
+    cdmDatabaseSchema,
+    labName,
+    cohortDefinitionId,
+    ancestorConceptId,
+    abnormalLowerLimit,
+    abnormalUpperLimit,
+    plausibleLowerLimit,
+    plausibleUpperLimit
+) {
+
   results <- list()
-  
+
   for (startMonth in seq(0, 114, by = 6)) {
-    
+
     endMonth <- startMonth + 6
-    
+
+    #
     # Patients still exposed and in data
+    #
+    sql <- "
+    SELECT COUNT(DISTINCT subject_id) AS n
+    FROM @workDatabaseSchema.@cohortTable
+    WHERE cohort_definition_id = @cohortDefinitionId
+      AND cohort_end_date >=
+          DATEADD(month, @startMonth, cohort_start_date);
+    "
+
+    sql <- SqlRender::render(
+      sql,
+      workDatabaseSchema = workDatabaseSchema,
+      cohortTable = cohortTable,
+      cohortDefinitionId = cohortDefinitionId,
+      startMonth = startMonth
+    )
+
+    sql <- SqlRender::translate(
+      sql,
+      targetDialect = DatabaseConnector::dbms(con)
+    )
+
     labCohort <- DatabaseConnector::querySql(
       con,
-      paste0(
-        "
-SELECT COUNT(DISTINCT subject_id) AS n
-FROM ", workDatabaseSchema, ".", cohortTable, "
-WHERE cohort_definition_id = ", cohortDefinitionId, "
-AND cohort_end_date >= cohort_start_date + INTERVAL '",
-        startMonth,
-        " MONTHS';
-"
-      )
+      sql
     )
-    
+
     nExposed <- labCohort$n
-    
+
+    #
     # Overall lab values
-    overallLabValues <- querySql(
-      con,
-      paste0(
-        "
-SELECT
-c.subject_id,
-c.cohort_start_date,
-c.cohort_end_date,
-m.measurement_date,
-m.measurement_concept_id,
-m.value_as_number,
-m.unit_concept_id
-FROM ",
-        workDatabaseSchema, ".", cohortTable, " c
-JOIN ",
-        cdmDatabaseSchema, ".measurement m
-ON c.subject_id = m.person_id
-WHERE c.cohort_definition_id = ", cohortDefinitionId, "
-AND m.measurement_concept_id IN (
-SELECT descendant_concept_id
-FROM ", cdmDatabaseSchema, ".concept_ancestor
-WHERE ancestor_concept_id = ", ancestorConceptId, "
-)
-AND m.value_as_number IS NOT NULL
-AND m.value_as_number >= ",plausibleLowerLimit,"
-AND m.value_as_number <= ",plausibleUpperLimit,"
-AND m.measurement_date >= c.cohort_start_date + INTERVAL '",
-      startMonth,
-      " MONTHS'
-AND m.measurement_date < c.cohort_start_date + INTERVAL '",
-      endMonth,
-      " MONTHS'
-AND m.measurement_date <= c.cohort_end_date;
-"
+    #
+    sql <- "
+    SELECT
+      c.subject_id,
+      c.cohort_start_date,
+      c.cohort_end_date,
+      m.measurement_date,
+      m.measurement_concept_id,
+      m.value_as_number,
+      m.unit_concept_id
+    FROM @workDatabaseSchema.@cohortTable c
+    JOIN @cdmDatabaseSchema.measurement m
+      ON c.subject_id = m.person_id
+    WHERE c.cohort_definition_id = @cohortDefinitionId
+      AND m.measurement_concept_id IN (
+        SELECT descendant_concept_id
+        FROM @cdmDatabaseSchema.concept_ancestor
+        WHERE ancestor_concept_id = @ancestorConceptId
       )
+      AND m.value_as_number IS NOT NULL
+      AND m.value_as_number >= @plausibleLowerLimit
+      AND m.value_as_number <= @plausibleUpperLimit
+      AND m.measurement_date >=
+          DATEADD(month, @startMonth, c.cohort_start_date)
+      AND m.measurement_date <
+          DATEADD(month, @endMonth, c.cohort_start_date)
+      AND m.measurement_date <= c.cohort_end_date;
+    "
+
+    sql <- SqlRender::render(
+      sql,
+      workDatabaseSchema = workDatabaseSchema,
+      cohortTable = cohortTable,
+      cdmDatabaseSchema = cdmDatabaseSchema,
+      cohortDefinitionId = cohortDefinitionId,
+      ancestorConceptId = ancestorConceptId,
+      plausibleLowerLimit = plausibleLowerLimit,
+      plausibleUpperLimit = plausibleUpperLimit,
+      startMonth = startMonth,
+      endMonth = endMonth
     )
 
-# Patients with at least one measurement
-patientsWithMeasurement <- dplyr::n_distinct(
-  overallLabValues$subject_id
-)
+    sql <- SqlRender::translate(
+      sql,
+      targetDialect = DatabaseConnector::dbms(con)
+    )
 
-# Missingness
-missingPatients <- nExposed - patientsWithMeasurement
+    overallLabValues <- DatabaseConnector::querySql(
+      con,
+      sql
+    )
 
-missingPercentage <- ifelse(
-  nExposed > 0,
-  100 * missingPatients / nExposed,
-  NA
-)
+    #
+    # Patients with at least one measurement
+    #
+    patientsWithMeasurement <- dplyr::n_distinct(
+      overallLabValues$subject_id
+    )
 
-# Number of measurements per patient
-labCounts <- overallLabValues %>%
-  dplyr::count(subject_id, name = "nLab")
+    #
+    # Missingness
+    #
+    missingPatients <- nExposed - patientsWithMeasurement
 
-medianLabPerPatient <- if (nrow(labCounts) > 0) {
-  median(labCounts$nLab, na.rm = TRUE)
-} else {
-  NA
-}
+    missingPercentage <- ifelse(
+      nExposed > 0,
+      100 * missingPatients / nExposed,
+      NA
+    )
 
-q1LabPerPatient <- if (nrow(labCounts) > 0) {
-  quantile(
-    labCounts$nLab,
-    probs = 0.25,
-    na.rm = TRUE
-  )
-} else {
-  NA
-}
+    #
+    # Number of measurements per patient
+    #
+    labCounts <- overallLabValues %>%
+      dplyr::count(subject_id, name = "nLab")
 
-q3LabPerPatient <- if (nrow(labCounts) > 0) {
-  quantile(
-    labCounts$nLab,
-    probs = 0.75,
-    na.rm = TRUE
-  )
-} else {
-  NA
-}
+    medianLabPerPatient <- if (nrow(labCounts) > 0) {
+      median(labCounts$nLab, na.rm = TRUE)
+    } else {
+      NA
+    }
 
-meanLabPerPatient <- if (nrow(labCounts) > 0) {
-  mean(labCounts$nLab, na.rm = TRUE)
-} else {
-  NA
-}
+    q1LabPerPatient <- if (nrow(labCounts) > 0) {
+      quantile(
+        labCounts$nLab,
+        probs = 0.25,
+        na.rm = TRUE
+      )
+    } else {
+      NA
+    }
 
-sdLabPerPatient <- if (nrow(labCounts) > 1) {
-  sd(labCounts$nLab, na.rm = TRUE)
-} else {
-  NA
-}
+    q3LabPerPatient <- if (nrow(labCounts) > 0) {
+      quantile(
+        labCounts$nLab,
+        probs = 0.75,
+        na.rm = TRUE
+      )
+    } else {
+      NA
+    }
 
-# Lab value distribution
-medianLab <- if (nrow(overallLabValues) > 0) {
-  median(overallLabValues$value_as_number, na.rm = TRUE)
-} else {
-  NA
-}
+    meanLabPerPatient <- if (nrow(labCounts) > 0) {
+      mean(labCounts$nLab, na.rm = TRUE)
+    } else {
+      NA
+    }
 
-q1Lab <- if (nrow(overallLabValues) > 0) {
-  quantile(
-    overallLabValues$value_as_number,
-    probs = 0.25,
-    na.rm = TRUE
-  )
-} else {
-  NA
-}
+    sdLabPerPatient <- if (nrow(labCounts) > 1) {
+      sd(labCounts$nLab, na.rm = TRUE)
+    } else {
+      NA
+    }
 
-q3Lab <- if (nrow(overallLabValues) > 0) {
-  quantile(
-    overallLabValues$value_as_number,
-    probs = 0.75,
-    na.rm = TRUE
-  )
-} else {
-  NA
-}
+    #
+    # Lab value distribution
+    #
+    medianLab <- if (nrow(overallLabValues) > 0) {
+      median(overallLabValues$value_as_number, na.rm = TRUE)
+    } else {
+      NA
+    }
 
-meanLab <- if (nrow(overallLabValues) > 0) {
-  mean(overallLabValues$value_as_number, na.rm = TRUE)
-} else {
-  NA
-}
+    q1Lab <- if (nrow(overallLabValues) > 0) {
+      quantile(
+        overallLabValues$value_as_number,
+        probs = 0.25,
+        na.rm = TRUE
+      )
+    } else {
+      NA
+    }
 
-sdLab <- if (nrow(overallLabValues) > 1) {
-  sd(overallLabValues$value_as_number, na.rm = TRUE)
-} else {
-  NA
-}
+    q3Lab <- if (nrow(overallLabValues) > 0) {
+      quantile(
+        overallLabValues$value_as_number,
+        probs = 0.75,
+        na.rm = TRUE
+      )
+    } else {
+      NA
+    }
 
-# Abnormal patients
-abnormalPatients <- overallLabValues %>%
-  dplyr::filter(
-    value_as_number >= abnormalLowerLimit,
-    value_as_number <= abnormalUpperLimit
-  ) %>%
-  dplyr::distinct(subject_id)
+    meanLab <- if (nrow(overallLabValues) > 0) {
+      mean(overallLabValues$value_as_number, na.rm = TRUE)
+    } else {
+      NA
+    }
 
-nAbnormalPatients <- nrow(abnormalPatients)
+    sdLab <- if (nrow(overallLabValues) > 1) {
+      sd(overallLabValues$value_as_number, na.rm = TRUE)
+    } else {
+      NA
+    }
 
-# Results
-results[[paste0(startMonth, "_", endMonth)]] <- data.frame(
-  Lab = labName,
-  Interval = paste0(startMonth, "-", endMonth, " months"),
-  
-  CohortPatients = nExposed,
-  PatientsWithMeasurement = patientsWithMeasurement,
-  MissingPatients = missingPatients,
-  MissingPct = round(missingPercentage, 2),
-  
-  MedianMeasurementsPerPatient = medianLabPerPatient,
-  Q1MeasurementsPerPatient = q1LabPerPatient,
-  Q3MeasurementsPerPatient = q3LabPerPatient,
-  MeanMeasurementsPerPatient = meanLabPerPatient,
-  SDMeasurementsPerPatient = sdLabPerPatient,
-  
-  MedianLabValue = medianLab,
-  Q1LabValue = q1Lab,
-  Q3LabValue = q3Lab,
-  MeanLabValue = meanLab,
-  SDLabValue = sdLab,
-  
-  AbnormalPatients = nAbnormalPatients
-)
+    #
+    # Abnormal patients
+    #
+    abnormalPatients <- overallLabValues %>%
+      dplyr::filter(
+        value_as_number >= abnormalLowerLimit,
+        value_as_number <= abnormalUpperLimit
+      ) %>%
+      dplyr::distinct(subject_id)
+
+    nAbnormalPatients <- nrow(abnormalPatients)
+
+    #
+    # Results
+    #
+    results[[paste0(startMonth, "_", endMonth)]] <- data.frame(
+      Lab = labName,
+      Interval = paste0(startMonth, "-", endMonth, " months"),
+
+      CohortPatients = nExposed,
+      PatientsWithMeasurement = patientsWithMeasurement,
+      MissingPatients = missingPatients,
+      MissingPct = round(missingPercentage, 2),
+
+      MedianMeasurementsPerPatient = medianLabPerPatient,
+      Q1MeasurementsPerPatient = q1LabPerPatient,
+      Q3MeasurementsPerPatient = q3LabPerPatient,
+      MeanMeasurementsPerPatient = meanLabPerPatient,
+      SDMeasurementsPerPatient = sdLabPerPatient,
+
+      MedianLabValue = medianLab,
+      Q1LabValue = q1Lab,
+      Q3LabValue = q3Lab,
+      MeanLabValue = meanLab,
+      SDLabValue = sdLab,
+
+      AbnormalPatients = nAbnormalPatients
+    )
   }
-  
+
   dplyr::bind_rows(results)
 }
-
