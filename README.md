@@ -196,12 +196,12 @@ Submitting results
 To send the compressed folder results please message Alexander Saelmans (a.saelmans@erasmusmc.nl) and he will give you the privateKeyFileName and userName. You can then run the following R code to share the results:
 
 ```r
-# Please upload both the strategusWork and strategusOutput folders
+# Please upload both the outputfolder
  
 # One time R package install
 install_github("ohdsi/OhdsiSharing")
  
-# Upload local files 'strategusWork.zip' and 'strategusOutput.zip to the sftp server study folder
+# Upload the local file to the sftp server study folder
 library("OhdsiSharing")
  
 privateKeyFileName <- "message us for this"
