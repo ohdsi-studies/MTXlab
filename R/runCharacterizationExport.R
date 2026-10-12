@@ -66,28 +66,34 @@ runCharacterizationExport <- function(
   )
 
   riskFactorSettings <- Characterization::createRiskFactorSettings(
+    studyPopulationSettings = createStudyPopulationSettings(
     targetIds = targetIds,
-    outcomeIds = outcomeIds,
     limitToFirstInNDays = 99999,
+    minPriorObservation = 365
+    ),
+    outcomeIds = outcomeIds,
     riskWindowStart = 0,
     startAnchor = "cohort start",
     riskWindowEnd = 1825,
     endAnchor = "cohort start",
     outcomeWashoutDays = 9999,
-    minPriorObservation = 365,
     covariateSettings = covariateSettings
   )
 
   dechallengeRechallengeSettings <-
     Characterization::createDechallengeRechallengeSettings(
-      targetIds = targetIds,
+      studyPopulationSettings = createStudyPopulationSettings(
+      targetIds = targetIds
+      ),
       outcomeIds = outcomeIds,
       dechallengeStopInterval = 30,
       dechallengeEvaluationWindow = 31
     )
 
   timeToEventSettings <- Characterization::createTimeToEventSettings(
-    targetIds = targetIds,
+    studyPopulationSettings = createStudyPopulationSetting(
+    targetIds = targetIds
+    ),
     outcomeIds = outcomeIds
   )
 
