@@ -66,7 +66,7 @@ runCharacterizationExport <- function(
   )
 
   riskFactorSettings <- Characterization::createRiskFactorSettings(
-    studyPopulationSettings = createStudyPopulationSettings(
+    studyPopulationSettings = Characterization::createStudyPopulationSettings(
     targetIds = targetIds,
     limitToFirstInNDays = 99999,
     minPriorObservation = 365
@@ -82,7 +82,7 @@ runCharacterizationExport <- function(
 
   dechallengeRechallengeSettings <-
     Characterization::createDechallengeRechallengeSettings(
-      studyPopulationSettings = createStudyPopulationSettings(
+      studyPopulationSettings = Characterization::createStudyPopulationSettings(
       targetIds = targetIds
       ),
       outcomeIds = outcomeIds,
@@ -91,7 +91,7 @@ runCharacterizationExport <- function(
     )
 
   timeToEventSettings <- Characterization::createTimeToEventSettings(
-    studyPopulationSettings = createStudyPopulationSetting(
+    studyPopulationSettings = Characterization::createStudyPopulationSettings(
     targetIds = targetIds
     ),
     outcomeIds = outcomeIds
