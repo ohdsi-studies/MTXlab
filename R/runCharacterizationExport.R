@@ -65,6 +65,15 @@ runCharacterizationExport <- function(
     includedCovariateIds = covariateIds
   )
 
+  targetBaselineSettings <- createTargetBaselineSettings(
+      studyPopulationSettings = createStudyPopulationSettings(
+        targetIds = targetIds,
+        limitToFirstInNDays = 99999,
+        minPriorObservation = 365
+  ),
+  covariateSettings = covariateSettings
+)
+
   riskFactorSettings <- Characterization::createRiskFactorSettings(
     studyPopulationSettings = Characterization::createStudyPopulationSettings(
     targetIds = targetIds,
