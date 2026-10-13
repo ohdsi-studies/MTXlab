@@ -85,7 +85,7 @@ runCharacterizationExport <- function(
     startAnchor = "cohort start",
     riskWindowEnd = 1825,
     endAnchor = "cohort start",
-    outcomeWashoutDays = 9999,
+    outcomeWashoutDays = 365,
     covariateSettings = covariateSettings
   )
 
