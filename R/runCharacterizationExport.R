@@ -108,6 +108,7 @@ runCharacterizationExport <- function(
 
   characterizationSettings <-
     Characterization::createCharacterizationSettings(
+      targetBaselineSettings = list(targetBaselineSettings),
       timeToEventSettings = list(timeToEventSettings),
       dechallengeRechallengeSettings =
         list(dechallengeRechallengeSettings),
