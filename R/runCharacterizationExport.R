@@ -62,7 +62,7 @@ runCharacterizationExport <- function(
     endDays = 0,
     addDescendantsToInclude = TRUE,
     addDescendantsToExclude = TRUE,
-    includedCovariateIds = covariateIds
+    includedCovariateConceptIds = covariateIds
   )
 
   targetBaselineSettings <- createTargetBaselineSettings(
