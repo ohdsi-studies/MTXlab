@@ -11,8 +11,6 @@
 #' @param outcomeTable Name of the outcome cohort table.
 #' @param outputDirectory Folder where results will be written.
 #' @param executionPath Folder used for execution tracking.
-#' @param csvFilePrefix Prefix for all generated CSV files.
-#' @param databaseId Unique identifier for the contributing database.
 #'
 #' @return Characterization results object.
 #' @export
@@ -24,9 +22,7 @@ runCharacterizationExport <- function(
     outcomeDatabaseSchema,
     outcomeTable,
     outputDirectory,
-    executionPath,
-    csvFilePrefix,
-    databaseId 
+    executionPath
 ) {
 
   # Fixed study cohorts
