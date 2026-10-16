@@ -238,7 +238,7 @@ runCharacterizationExport <- function(
     characterizationSettings = characterizationSettings,
     outputDirectory = characterizationOutputDirectory,
     executionPath = executionPath,
-    csvFilePrefix = "c_,
+    csvFilePrefix = "c_",
     databaseId = "1",
     incremental = FALSE,
     minCharacterizationMean = 0.00001,
