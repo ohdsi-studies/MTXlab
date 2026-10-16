@@ -11,9 +11,7 @@ runCharacterizationExport(connectionDetails,
                           outcomeDatabaseSchema,
                           outcomeTable,
                           outputDirectory,
-                          executionPath,
-                          csvFilePrefix,
-                          databaseId)
+                          executionPath)
 }
 \arguments{
 \item{connectionDetails}{}
@@ -30,9 +28,6 @@ runCharacterizationExport(connectionDetails,
 
 \item{executionPath}{}
 
-\item{csvFilePrefix}{}
-
-\item{databaseId}{}
 }
 \value{
 A dataframe
